@@ -27,6 +27,12 @@ There are also lots of other carpet extensions out there, adding countless new r
 
 [extension list]: https://github.com/gnembon/fabric-carpet/wiki/List-of-Carpet-extensions
 
+# Updated to 26.3
+
+Download the 26.3 JAR from [the 26.3 release](https://github.com/vvcDaDa/carpet-extra/releases/tag/v26.3).
+
+This port was contributed by [vvcDaDa](https://github.com/vvcDaDa) with assistance from [Codex](https://github.com/codex).
+
 # Carpet Extra Features
 # Carpet Mod Settings
 ## accurateBlockPlacement
