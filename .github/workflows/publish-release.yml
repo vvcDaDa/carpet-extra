@@ -52,7 +52,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo
             })).data;
-            console.log('Previous release was: ' + releases[1].name);
+            console.log('Previous release was: ' + (releases[1]?.name ?? 'none'));
             for (let release of releases.slice(1)) {
               if (release.name.includes(READ_VERSION))
                 core.setFailed('Version number is the same as a previous release!')
@@ -111,6 +111,7 @@ jobs:
           asset_name: ${{ steps.findjar.outputs.jarname }}
           asset_content_type: application/java-archive
       - name: Upload to Curseforge
+        if: github.repository == 'gnembon/carpet-extra'
         uses: itsmeow/curseforge-upload@v3
         with:
           token: ${{ secrets.CF_API_TOKEN }}
