@@ -4,6 +4,7 @@ import carpetextra.CarpetExtraSettings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.Fertilizable;
+import net.minecraft.block.FertilizationCause;
 import net.minecraft.block.LilyPadBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -19,18 +20,18 @@ public abstract class LilyPadBlock_fertilizerMixin implements Fertilizable {
     @Shadow protected abstract boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos);
 
     @Override
-    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state) {
+    public boolean isFertilizable(WorldView world, BlockPos pos, BlockState state, FertilizationCause cause) {
         return CarpetExtraSettings.betterBonemeal;
     }
 
     @Override
-    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state)
+    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state, FertilizationCause cause)
     {
         return true;
     }
 
     @Override
-    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state)
+    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state, FertilizationCause cause)
     {
         if(!CarpetExtraSettings.betterBonemeal) return;
         BlockState blockState = Blocks.LILY_PAD.getDefaultState();

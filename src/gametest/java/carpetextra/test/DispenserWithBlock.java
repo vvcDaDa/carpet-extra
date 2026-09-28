@@ -9,7 +9,6 @@ import java.util.function.Supplier;
 
 import carpetextra.machinery.DynamicTest;
 import carpetextra.machinery.TestProvider;
-import carpetextra.mixins.AxeItem_StrippedBlocksAccessorMixin;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -26,10 +25,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.potion.Potions;
+import net.minecraft.registry.Registries;
 import net.minecraft.test.TestContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.GameMode;
 
 public class DispenserWithBlock {
@@ -132,14 +133,20 @@ public class DispenserWithBlock {
     @TestProvider
     public Collection<DynamicTest> stripTests() {
         List<DynamicTest> fns = new ArrayList<>();
-        Map<Block, Block> conversions = AxeItem_StrippedBlocksAccessorMixin.getStrippedBlocks();
-        
-        for (Map.Entry<Block, Block> entry : conversions.entrySet()) {
-            fns.add(makeDispenserTest("strip_" + entry.getKey().asItem(), (ctx) -> {
-                stripTest(ctx, Items.IRON_AXE, entry.getKey(), entry.getValue());
+        // These blocks are listed in vanilla's data/minecraft/block_transformer/axe.json.
+        for (String name : List.of("oak_wood", "oak_log", "dark_oak_wood", "dark_oak_log",
+                "pale_oak_wood", "pale_oak_log", "poplar_wood", "poplar_log",
+                "acacia_wood", "acacia_log", "cherry_wood", "cherry_log",
+                "birch_wood", "birch_log", "jungle_wood", "jungle_log",
+                "spruce_wood", "spruce_log", "warped_stem", "warped_hyphae",
+                "crimson_stem", "crimson_hyphae", "mangrove_wood", "mangrove_log", "bamboo_block")) {
+            Block source = Registries.BLOCK.get(Identifier.ofVanilla(name));
+            Block result = Registries.BLOCK.get(Identifier.ofVanilla("stripped_" + name));
+            fns.add(makeDispenserTest("strip_" + name, (ctx) -> {
+                stripTest(ctx, Items.IRON_AXE, source, result);
             }));
         }
-        for (Item tool : List.of(Items.WOODEN_AXE, Items.STONE_AXE, Items.GOLDEN_AXE, Items.IRON_AXE, Items.DIAMOND_AXE, Items.NETHERITE_AXE)) {
+        for (Item tool : List.of(Items.WOODEN_AXE, Items.COPPER_AXE, Items.STONE_AXE, Items.GOLDEN_AXE, Items.IRON_AXE, Items.DIAMOND_AXE, Items.NETHERITE_AXE)) {
             fns.add(makeDispenserTest("stripwith" + tool, (ctx) -> {
                 stripTest(ctx, tool, Blocks.OAK_LOG, Blocks.STRIPPED_OAK_LOG);
             }));
@@ -229,7 +236,7 @@ public class DispenserWithBlock {
             blockConversionTest(ctx, Items.IRON_HOE, Blocks.ROOTED_DIRT, Blocks.DIRT, 0, false, () -> ctx.expectItem(Items.HANGING_ROOTS));
         }));
         
-        for (Item hoe : List.of(Items.WOODEN_HOE, Items.STONE_HOE, Items.GOLDEN_HOE, Items.IRON_HOE, Items.DIAMOND_HOE, Items.NETHERITE_HOE)) {
+        for (Item hoe : List.of(Items.WOODEN_HOE, Items.COPPER_HOE, Items.STONE_HOE, Items.GOLDEN_HOE, Items.IRON_HOE, Items.DIAMOND_HOE, Items.NETHERITE_HOE)) {
             fns.add(makeDispenserTest("tillDirtWith" + hoe, (ctx) -> {
                 blockConversionTest(ctx, hoe, Blocks.DIRT, Blocks.FARMLAND, 0, false);
             }));

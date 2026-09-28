@@ -22,6 +22,7 @@ import carpetextra.dispenser.behaviors.StripBlocksDispenserBehavior;
 import carpetextra.dispenser.behaviors.TillSoilDispenserBehavior;
 import carpetextra.dispenser.behaviors.ToggleBlockDispenserBehavior;
 import carpetextra.helpers.FlowerPotHelper;
+import carpetextra.utils.BlockTransformerUtils;
 import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -36,13 +37,12 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.passive.GoatEntity;
 import net.minecraft.entity.passive.MooshroomEntity;
-import net.minecraft.item.AxeItem;
 import net.minecraft.item.BoatItem;
-import net.minecraft.item.HoeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShearsItem;
+import net.minecraft.component.type.BlockTransformerComponents;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.registry.tag.BlockTags;
@@ -193,19 +193,21 @@ public class CarpetExtraDispenserBehaviors {
         }
 
         // dispensersStripBlocks
-        if(CarpetExtraSettings.dispensersStripBlocks && item instanceof AxeItem && (StripBlocksDispenserBehavior.canStrip(frontBlock) || StripBlocksDispenserBehavior.isStripResult(frontBlock))) {
+        if(CarpetExtraSettings.dispensersStripBlocks && BlockTransformerUtils.hasTransformer(stack, BlockTransformerComponents.AXE)
+                && (BlockTransformerUtils.canTransform(world, frontBlockPos, dispenserFacing.getOpposite(), stack)
+                    || StripBlocksDispenserBehavior.isStripResult(frontBlock))) {
             return STRIP_BLOCK;
         }
 
         // dispensersTillSoil
-        if(CarpetExtraSettings.dispensersTillSoil && item instanceof HoeItem) {
+        if(CarpetExtraSettings.dispensersTillSoil && BlockTransformerUtils.hasTransformer(stack, BlockTransformerComponents.HOE)) {
             // check block in front of dispenser and one block down
             for(int i = 0; i < 2; i++) {
                 BlockPos hoeBlockPos = frontBlockPos.down(i);
                 Block hoeBlock = world.getBlockState(hoeBlockPos).getBlock();
 
                 // check if block is in tilled blocks, or is farmland (to prevent hoe being dispensed when you don't want it to)
-                if(TillSoilDispenserBehavior.TILLED_BLOCKS.contains(hoeBlock) || hoeBlock == Blocks.FARMLAND) {
+                if(BlockTransformerUtils.canTransform(world, hoeBlockPos, dispenserFacing.getOpposite(), stack) || hoeBlock == Blocks.FARMLAND) {
                     return TILL_SOIL;
                 }
             }

@@ -14,6 +14,7 @@ import net.minecraft.test.TestEnvironmentDefinition;
 import net.minecraft.test.TestInstance;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockRotation;
+import net.minecraft.world.World;
 
 // slightly extended TestData
 public record DynamicTest(
@@ -54,6 +55,7 @@ public record DynamicTest(
         
         return new TestData<>(
                 testEnvironment,
+                World.OVERWORLD,
                 Identifier.of(gameTest.structure()),
                 gameTest.maxTicks(),
                 gameTest.setupTicks(),
