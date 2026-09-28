@@ -2,12 +2,6 @@ name: Build and release Carpet Extra 26.3
 
 on:
   workflow_dispatch:
-    inputs:
-      publish:
-        description: Publish the v26.3 GitHub release after the build and game tests pass
-        required: true
-        type: boolean
-        default: false
 
 concurrency:
   group: carpet-extra-release-v26.3
@@ -15,7 +9,6 @@ concurrency:
 
 jobs:
   release:
-    if: inputs.publish
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -31,12 +24,19 @@ jobs:
       - name: Build and run game tests
         run: |
           chmod +x gradlew
-          ./gradlew build --no-daemon
+          ./gradlew build runGametest --no-daemon
+      - name: Check release artifact
+        run: test -f build/libs/carpet-extra-26.3.jar
+      - name: Save release artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: carpet-extra-26.3
+          path: build/libs/carpet-extra-26.3.jar
+          if-no-files-found: error
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          test -f build/libs/carpet-extra-26.3.jar
           gh release create v26.3 build/libs/carpet-extra-26.3.jar \
             --target "$GITHUB_SHA" \
             --title "Carpet Extra 26.3 for Minecraft 26.3" \
