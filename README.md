@@ -27,7 +27,7 @@ There are also lots of other carpet extensions out there, adding countless new r
 
 [extension list]: https://github.com/gnembon/fabric-carpet/wiki/List-of-Carpet-extensions
 
-# Updated to 26.3
+## Updated to 26.3
 
 Download the 26.3 JAR from [the 26.3 release](https://github.com/vvcDaDa/carpet-extra/releases/tag/v26.3).
 
