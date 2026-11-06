@@ -33,6 +33,8 @@ Download the 26.3 JAR from [the 26.3 release](https://github.com/vvcDaDa/carpet-
 
 PS: Since this mod is usually not updated in a timely manner and may even miss some versions, this repository is dedicated to addressing the mod’s version update issues and will be maintained by [Codex](https://github.com/codex) on a long-term basis.
 
+If you encounter bugs, you can also submit issues to this repository. I’ll try to fix them within my ability or just throw them to Codex and Claude Code to fix :)
+
 This port was contributed by [vvcDaDa](https://github.com/vvcDaDa) with assistance from [Codex](https://github.com/codex).
 
 # Carpet Extra Features
